@@ -1,7 +1,5 @@
 package com.titancore;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Scanner;
 
 public class App {
@@ -45,20 +43,20 @@ public class App {
 
     // Converter variables and calculators
     public static double calculatePace(double distance, int time) {
-        double pace = time / distance;
+        double pace = Math.round(time / distance * 100.0) / 100.0;
         return pace;
     }
 
     public static double calculateCompoundInterest(double initialCapital, double annualInterestRate, int years) {
         double rateDecimal = annualInterestRate / 100.0;
         double finalAmountFactor = Math.pow(1 + rateDecimal, years);
-        double interestOnly = initialCapital * (finalAmountFactor - 1);
-        return Math.round(interestOnly);
+        double finalCapital = initialCapital * finalAmountFactor;
+        return Math.round(finalCapital);
     }
 
     public static double convertPoundsToKilograms(double pounds) {
         double kilograms = 0;
-        kilograms = Math.round(pounds * 0.45);
+        kilograms = Math.round(pounds * 0.45 * 100.0) / 100.0;
         return kilograms;
     }
 
