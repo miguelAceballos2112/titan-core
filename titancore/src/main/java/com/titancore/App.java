@@ -1,6 +1,10 @@
 package com.titancore;
 
-import java.util.Scanner;
+import static com.titancore.Utilities.ScannerReadAndWrite.ingresarEntero;
+import static com.titancore.Utilities.ScannerReadAndWrite.ingresarReal;
+import static com.titancore.Fitness.RunningCalculator.calculatePace;
+import static com.titancore.Fitness.Gym.convertPoundsToKilograms;
+import static com.titancore.Finance.InterestCalculator.calculateCompoundInterest;
 
 public class App {
     public static void main(String[] args) {
@@ -39,40 +43,6 @@ public class App {
             }
             System.out.println(mostrarMensaje);
         } while (ejecuting);
-    }
-
-    // Converter variables and calculators
-    public static double calculatePace(double distance, int time) {
-        double pace = Math.round(time / distance * 100.0) / 100.0;
-        return pace;
-    }
-
-    public static double calculateCompoundInterest(double initialCapital, double annualInterestRate, int years) {
-        double rateDecimal = annualInterestRate / 100.0;
-        double finalAmountFactor = Math.pow(1 + rateDecimal, years);
-        double finalCapital = initialCapital * finalAmountFactor;
-        return Math.round(finalCapital);
-    }
-
-    public static double convertPoundsToKilograms(double pounds) {
-        double kilograms = 0;
-        kilograms = Math.round(pounds * 0.45 * 100.0) / 100.0;
-        return kilograms;
-    }
-
-    // scanner input reading variables
-    public static double ingresarReal(String mensaje) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print(mensaje);
-        double valorReal = scanner.nextDouble();
-        return valorReal;
-    }
-
-    public static int ingresarEntero(String mensaje) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print(mensaje);
-        int valorEntero = scanner.nextInt();
-        return valorEntero;
     }
 
 }
