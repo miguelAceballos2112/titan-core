@@ -1,9 +1,11 @@
 package com.titancore;
 
-import com.titancore.Utilities.ScannerReadAndWrite;
-import com.titancore.Fitness.RunningCalculator;
 import com.titancore.Finance.InterestCalculator;
 import com.titancore.Fitness.Gym;
+import com.titancore.Fitness.RunningCalculator;
+import com.titancore.Utilities.ScannerReadAndWrite;
+
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -15,14 +17,47 @@ public class App {
         boolean ejecuting = true;
         do {
             int optionCalculator = scanner.ingresarEntero(
-                    "Ingrese que calculo quiere hace el dia de hoy\n1 - Ritmo\n2 - Interes compuesto\n3 - Conversion de libras a kilogramos\n4 - Salir\nOpcion:");
+                    "Ingrese que quiere hace el dia de hoy\n1 - Mirar opciones de running\n" +
+                            "2 - Calcular un interés compuesto\n3 - Conversion de libras a kilogramos\n4 - Salir\nOpcion:");
             String mostrarMensaje = "";
             switch (optionCalculator) {
                 case 1:
-                    double distance = scanner.ingresarReal("Ingrese la distacia en km: ");
-                    int time = scanner.ingresarEntero("Ingrese el tiempo en minutos: ");
-                    double pace = myRunningCalculator.calculatePace(distance, time);
-                    mostrarMensaje = "El ritmo es: " + pace + " minutos/km";
+                    boolean runningCOntinue = true;
+                    do {
+                        int optionRunning = scanner.ingresarEntero(
+                                "Que quieres hacer el dia de hoy en running?:\n1 - Calcular ritmo\n2 - Ingresar ritmos al historial\n" +
+                                        "3 - Mirar historial de ritmos registrados\n4- Salir de running\nOpcion:");
+                        switch (optionRunning) {
+                            case 1:
+                                double distance = scanner.ingresarReal("Ingrese la distacia en km: ");
+                                int time = scanner.ingresarEntero("Ingrese el tiempo en minutos: ");
+                                double pace = myRunningCalculator.calculatePace(distance, time);
+                                mostrarMensaje = "El ritmo es: " + pace + " minutos/km";
+                                break;
+                            case 2:
+                                double ritmoRegistrado = scanner.ingresarReal("Ingrese el ritmo ya calculado :");
+                                myRunningCalculator.addPaceToHistory(ritmoRegistrado);
+                                mostrarMensaje = "Ritmo guardado correctamente";
+                                break;
+                            case 3:
+                                System.out.println("--- Historial de Ritmos ---");
+                                List<Double> historial = myRunningCalculator.getPaceHistory();
+                                if (historial.isEmpty()) {
+                                    System.out.println("No hay ritmos registrados aún.");
+                                } else {
+                                    for (int i = 0; i < historial.size(); i++) {
+                                        System.out.println("Registro " + (i + 1) + ": " + historial.get(i) + " min/km");
+                                    }
+                                }
+                                break;
+                            case 4:
+                                mostrarMensaje = "Saliste de el menu de running";
+                                runningCOntinue = false;
+                            default: System.out.println("Opcion incorrecta");
+                        }
+                        System.out.println(mostrarMensaje);
+                    } while (runningCOntinue);
+
                     break;
                 case 2:
                     double initialCapital = scanner.ingresarReal("Ingrese el capital inicial (en pesos colombianos): ");
@@ -42,8 +77,8 @@ public class App {
                     mostrarMensaje = "Gracias por usar el programa";
                     ejecuting = false;
                     break;
-                default:
-                    mostrarMensaje = "Opcion no valida";
+                default:mostrarMensaje = "Opcion no valida";
+
                     break;
             }
             System.out.println(mostrarMensaje);
