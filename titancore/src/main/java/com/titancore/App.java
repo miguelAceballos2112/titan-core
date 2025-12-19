@@ -1,7 +1,8 @@
 package com.titancore;
 
 import com.titancore.Utilities.ScannerReadAndWrite;
-import com.titancore.Fitness.RunningCalculator;
+import com.titancore.Fitness.RunningHistory;
+import com.titancore.Fitness.RunningSession;
 import com.titancore.Finance.InterestCalculator;
 import com.titancore.Fitness.Gym;
 
@@ -9,7 +10,8 @@ public class App {
     public static void main(String[] args) {
         // Variables where data is entered
         ScannerReadAndWrite scanner = new ScannerReadAndWrite();
-        RunningCalculator myRunningCalculator = new RunningCalculator();
+        RunningSession myRunningSession;
+        RunningHistory myRunningHistory = new RunningHistory();
         InterestCalculator myInterestCalculator = new InterestCalculator();
         Gym myGym = new Gym();
         boolean ejecuting = true;
@@ -23,50 +25,50 @@ public class App {
                     boolean ejecutinRunningMenu = true;
                     do {
                         int runningOption = scanner.ingresarEntero(
-                                "Que quiere hacer en opciones de running?\n1 - Calcular ritmo\n2 - Agregar sesion de running al historial"
+                                "Que quiere hacer en opciones de running?\n1 -  Registrar Sesion\n2 - Consultar historial de sesiones"
                                         +
-                                        "\n3 - Calcular paso promedio de todas las sesiones del historial\n4 - Mirar historial de sesiones\n5 - Salir del menu de running\nOpcion:");
+                                        "\n3 - Consultar distancia recorrida total\n4 - Consultar total de minutos en sesiones\n5 - Salir del manu de running\nOpcion:");
                         switch (runningOption) {
                             case 1:
                                 double distance = scanner.ingresarReal("Ingrese la distacia en km: ");
-                                int time = scanner.ingresarEntero("Ingrese el tiempo en minutos: ");
-                                double pace = myRunningCalculator.calculatePace(distance, time);
-                                mostrarMensajeRunning = "El ritmo es: " + pace + " minutos/km";
+                                double time = scanner.ingresarReal("Ingrese el tiempo en minutos: ");
+                                myRunningSession = new RunningSession(distance, time);
+                                myRunningHistory.addSessionToHistory(myRunningSession);
                                 break;
                             case 2:
-                                double paceToAdd = scanner
-                                        .ingresarReal("Ingrese el ritmo (minutos/km) a agregar al historial: ");
-                                myRunningCalculator.addPaceToHistory(paceToAdd);
-                                mostrarMensajeRunning = "Ritmo agregado al historial.";
+                                int numSession = 1;
+                                for (RunningSession session : myRunningHistory.getSessionsHistory()) {
+                                    mostrarMensajeRunning = "Sesion " + numSession + ": "
+                                            + session.getPace() + " minutos/km     Distancia: "
+                                            + session.getDistance() + " km     Tiempo: " + session.getTime()
+                                            + " minutos";
+                                    System.out.println(mostrarMensajeRunning);
+                                    numSession++;
+                                }
                                 break;
                             case 3:
-                                for (int i = 0; i < myRunningCalculator.getPaceHistory().size(); i++) {
-                                    mostrarMensajeRunning += "Sesion " + (i + 1) + ": "
-                                            + myRunningCalculator.getPaceHistory().get(i) + " minutos/km\n";
-                                }
+                                mostrarMensajeRunning = "La distancia total recorrida es: "
+                                        + myRunningHistory.getTotalDistance()
+                                        + "km";
+                                System.out.println(mostrarMensajeRunning);
                                 break;
 
                             case 4:
-                                if (myRunningCalculator.getPaceHistory().isEmpty()) {
-                                    mostrarMensajeRunning = "--- Historial de Ritmos ---\nNo hay sesiones en el historial.";
-                                } else {
-                                    mostrarMensajeRunning = "--- Historial de Ritmos ---\n";
-                                    for (int i = 0; i < myRunningCalculator.getPaceHistory().size(); i++) {
-                                        mostrarMensajeRunning += "Sesion " + (i + 1) + ": "
-                                                + myRunningCalculator.getPaceHistory().get(i) + " minutos/km\n";
-                                    }
-                                }
+                                mostrarMensajeRunning = "El tiempo total en sesiones es: " +
+                                        myRunningHistory.getTotalTime()
+                                        + " minutos";
+                                System.out.println(mostrarMensajeRunning);
                                 break;
-
                             case 5:
                                 mostrarMensajeRunning = "Saliendo del menu de running.";
                                 ejecutinRunningMenu = false;
+                                System.out.println(mostrarMensajeRunning);
                                 break;
                             default:
                                 mostrarMensajeRunning = "Opcion no valida en menu de running.";
+                                System.out.println(mostrarMensajeRunning);
                                 break;
                         }
-                        System.out.println(mostrarMensajeRunning);
                     } while (ejecutinRunningMenu);
 
                     break;
